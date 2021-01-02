@@ -16,7 +16,7 @@ export default class MyApp extends App {
     return (
       <React.Fragment>
         <Head>
-          <title>My App</title>
+          <title>My Memes</title>
         </Head>
         <Auth0Provider
           domain="dev-7aw7hycc.eu.auth0.com"
