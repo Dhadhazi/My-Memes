@@ -4,13 +4,22 @@ import { useAuth0 } from "../lib/auth0-spa";
 import Login from "../components/Login";
 import Link from "next/link";
 import Layout from "../components/Layout";
+import { UploadMeme } from "../components/UploadMeme";
 
 interface Props {}
 
 const Page: NextPage<Props> = () => {
   const { user } = useAuth0();
 
-  return <Layout>{user && <div>Upload picture</div>}</Layout>;
+  return (
+    <Layout>
+      {user && (
+        <div>
+          <UploadMeme />
+        </div>
+      )}
+    </Layout>
+  );
 };
 
 export default Page;
