@@ -1,6 +1,6 @@
 import * as AWSXRay from "aws-xray-sdk";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
-import { MemeItem } from "../models/MemeItem";
+import { MemeCategory } from "../models/MemeCategory";
 
 const XAWS = AWSXRay.captureAWS(AWS);
 
@@ -10,7 +10,7 @@ export class MemeAccess {
     private readonly memesTable = process.env.MEMES_TABLE
   ) {}
 
-  async getAllMemes(userId: string): Promise<MemeItem[]> {
+  async getAllMemes(userId: string): Promise<MemeCategory[]> {
     const result = await this.docClient
       .query({
         TableName: this.memesTable,
@@ -22,6 +22,6 @@ export class MemeAccess {
       .promise();
     const items = result.Items;
 
-    return items as MemeItem[];
+    return items as MemeCategory[];
   }
 }

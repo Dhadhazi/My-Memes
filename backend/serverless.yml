@@ -16,8 +16,8 @@ provider:
   region: ${opt:region, 'eu-west-1'}
 
   environment:
-    MEMES_TABLE: Memes-${self:provider.stage}
-    INDEX_NAME: MemesIndex-${self:provider.stage}
+    MEMES_TABLE: Memess-${self:provider.stage}
+    INDEX_NAME: MemessCatIndex-${self:provider.stage}
     IMAGES_S3_BUCKET: meme-images-asdf234-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
@@ -40,6 +40,69 @@ custom:
         description: Serverless application for uploading and categorizing memes
 
 functions:
+  Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
+
+  GetMemes:
+    handler: src/lambda/http/getMemes.handler
+    events:
+      - http:
+          method: get
+          path: memes
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEMES_TABLE}
 
 resources:
   Resources:
+    MemesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.MEMES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: category
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: category
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    AttachmentsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.IMAGES_S3_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - "*"
+              AllowedHeaders:
+                - "*"
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: MyPolicy
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: "*"
+              Action: "s3:GetObject"
+              Resource: "arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*"
+        Bucket: !Ref AttachmentsBucket
