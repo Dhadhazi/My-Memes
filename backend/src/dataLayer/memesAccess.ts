@@ -24,4 +24,15 @@ export class MemeAccess {
 
     return items as MemeCategory[];
   }
+
+  async addMeme(meme: MemeCategory): Promise<MemeCategory> {
+    await this.docClient
+      .put({
+        TableName: this.memesTable,
+        Item: meme,
+      })
+      .promise();
+
+    return meme;
+  }
 }

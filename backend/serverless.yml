@@ -17,7 +17,6 @@ provider:
 
   environment:
     MEMES_TABLE: Memess-${self:provider.stage}
-    INDEX_NAME: MemessCatIndex-${self:provider.stage}
     IMAGES_S3_BUCKET: meme-images-asdf234-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
@@ -55,6 +54,20 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEMES_TABLE}
+
+  addMeme:
+    handler: src/lambda/http/addMeme.handler
+    events:
+      - http:
+          method: post
+          path: memes
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEMES_TABLE}
 
 resources:
