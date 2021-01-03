@@ -1,5 +1,24 @@
 import { apiEndpoint } from "../config";
 import Axios from "axios";
+import { MemeCategory } from "../types/MemeCategory";
+import { MemeUpload } from "../types/MemeUpload";
+
+export async function addMeme(
+  idToken: string,
+  newMeme: MemeUpload
+): Promise<MemeCategory> {
+  const response = await Axios.post(
+    `${apiEndpoint}/memes`,
+    JSON.stringify(newMeme),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`,
+      },
+    }
+  );
+  return response.data.item;
+}
 
 export async function getUploadUrl(
   idToken: string,

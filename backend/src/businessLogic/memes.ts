@@ -1,6 +1,7 @@
 import * as uuid from "uuid";
 import { MemeAccess } from "../dataLayer/memesAccess";
 import { MemeCategory } from "../models/MemeCategory";
+import { MemeUpload } from "../models/MemeUpload";
 
 const memeAccess = new MemeAccess();
 
@@ -9,7 +10,7 @@ export async function getAllTodos(userId: string): Promise<MemeCategory[]> {
 }
 
 export async function addMeme(
-  newMeme: MemeCategory,
+  newMeme: MemeUpload,
   userId: string
 ): Promise<MemeCategory> {
   const memeId = uuid.v4();

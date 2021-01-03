@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { getUploadUrl } from "../api/memeapi";
+import { addMeme } from "../api/memeapi";
+import { useAuth0 } from "../lib/auth0-spa";
 
 export const UploadMeme = () => {
   const [file, setFile] = useState<any>();
-  const [category, setCategory] = useState<string>();
+  const [category, setCategory] = useState<string>("");
+  const auth = useAuth0();
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
@@ -15,6 +17,11 @@ export const UploadMeme = () => {
     setCategory(e.target.value);
   }
 
+  async function getIdToken() {
+    const token = await auth.getIdTokenClaims();
+    return token.__raw;
+  }
+
   async function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
 
@@ -22,9 +29,20 @@ export const UploadMeme = () => {
       alert("File should be selected!");
       return;
     }
-
-    console.log(event);
+    if (category.length < 3) {
+      alert("Category must be at least 3 charactes");
+      return;
+    }
+    const idToken = await getIdToken();
+    const meme = {
+      category,
+      file,
+    };
+    const res = await addMeme(idToken, meme);
+    console.log(res);
   }
+
+  getIdToken();
 
   return (
     <div>
