@@ -41,5 +41,5 @@ export async function addMeme(
 }
 
 export async function getUploadUrl(memeId: string) {
-  const url = await bucketAccess.getUploadUrl(memeId);
+  return await bucketAccess.getUploadUrl(memeId);
 }
