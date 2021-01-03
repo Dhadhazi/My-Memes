@@ -6,7 +6,7 @@ import {
   APIGatewayProxyHandler,
 } from "aws-lambda";
 
-import { getAllTodos } from "../../businessLogic/memes";
+import { getAllMemes } from "../../businessLogic/memes";
 import { getUserIdFromHeader } from "../../auth/utils";
 
 export const handler: APIGatewayProxyHandler = async (
@@ -14,7 +14,7 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   const userId = getUserIdFromHeader(event.headers.Authorization);
 
-  const memes = await getAllTodos(userId);
+  const memes = await getAllMemes(userId);
 
   return {
     statusCode: 200,

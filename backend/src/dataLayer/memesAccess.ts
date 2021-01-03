@@ -26,14 +26,50 @@ export class MemeAccess {
     return items as MemeCategory[];
   }
 
-  async addMeme(meme: MemeCategory): Promise<MemeCategory> {
+  async categoryExist(userId: string, category: string) {
+    const result = await this.docClient
+      .query({
+        TableName: this.memesTable,
+        KeyConditionExpression: "userId = :userId AND category = :category",
+        ExpressionAttributeValues: {
+          ":userId": userId,
+          ":category": category,
+        },
+      })
+      .promise();
+    console.log("Get Category result", result);
+
+    return result.Items as MemeCategory[];
+  }
+
+  async createMemeCategory(meme: MemeCategory): Promise<MemeCategory> {
     await this.docClient
       .put({
         TableName: this.memesTable,
         Item: meme,
       })
       .promise();
-
     return meme;
+  }
+
+  async updateFiles(meme: MemeCategory) {
+    const result = await this.docClient
+      .update({
+        TableName: this.memesTable,
+        Key: {
+          userId: meme.userId,
+          category: meme.category,
+        },
+        ExpressionAttributeValues: {
+          ":files": meme.files,
+        },
+        UpdateExpression: "SET files = :files",
+        ReturnValues: "ALL_NEW",
+      })
+      .promise();
+
+    console.log("Update Category Result", result);
+
+    return result;
   }
 }

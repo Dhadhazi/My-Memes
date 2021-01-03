@@ -13,13 +13,13 @@ export const UploadMeme = () => {
     setFile(files[0]);
   }
 
-  function handleCategoryChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setCategory(e.target.value);
-  }
-
   async function getIdToken() {
     const token = await auth.getIdTokenClaims();
     return token.__raw;
+  }
+
+  function handleCategoryChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCategory(e.target.value);
   }
 
   async function handleSubmit(event: React.SyntheticEvent) {
@@ -34,6 +34,7 @@ export const UploadMeme = () => {
       return;
     }
     const idToken = await getIdToken();
+
     const meme = {
       category,
       file,
@@ -41,8 +42,6 @@ export const UploadMeme = () => {
     const res = await addMeme(idToken, meme);
     console.log(res);
   }
-
-  getIdToken();
 
   return (
     <div>
