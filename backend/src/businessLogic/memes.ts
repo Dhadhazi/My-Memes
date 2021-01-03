@@ -1,9 +1,11 @@
 import * as uuid from "uuid";
+import { BucketAccess } from "../dataLayer/bucketAccess";
 import { MemeAccess } from "../dataLayer/memesAccess";
 import { MemeCategory } from "../models/MemeCategory";
 import { MemeUpload } from "../models/MemeUpload";
 
 const memeAccess = new MemeAccess();
+const bucketAccess = new BucketAccess();
 
 export async function getAllMemes(userId: string): Promise<MemeCategory[]> {
   return memeAccess.getAllMemes(userId);
@@ -17,9 +19,6 @@ export async function addMeme(
 
   const url = `https://${process.env.IMAGES_S3_BUCKET}.s3.amazonaws.com/${memeId}`;
 
-  //Check if Category exists already
-  // IF exists, add the new image to it, update DB, return full Category
-  // else just add it to the database
   const categoryExists = await memeAccess.categoryExist(
     userId,
     newMeme.category
@@ -39,4 +38,8 @@ export async function addMeme(
       files: [url],
     });
   }
+}
+
+export async function getUploadUrl(memeId: string) {
+  const url = await bucketAccess.getUploadUrl(memeId);
 }
