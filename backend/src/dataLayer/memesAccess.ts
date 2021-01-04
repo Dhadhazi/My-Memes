@@ -22,11 +22,14 @@ export class MemeAccess {
       })
       .promise();
     const items = result.Items;
-
+    console.log("Get ALL Categories result", result);
     return items as MemeCategory[];
   }
 
-  async categoryExist(userId: string, category: string) {
+  async categoryExist(
+    userId: string,
+    category: string
+  ): Promise<MemeCategory[]> {
     const result = await this.docClient
       .query({
         TableName: this.memesTable,
@@ -43,13 +46,28 @@ export class MemeAccess {
   }
 
   async createMemeCategory(meme: MemeCategory): Promise<MemeCategory> {
-    await this.docClient
+    const result = await this.docClient
       .put({
         TableName: this.memesTable,
         Item: meme,
       })
       .promise();
+    console.log("Create Category result", result);
     return meme;
+  }
+
+  async deleteCategory(userId: string, category: string) {
+    const result = await this.docClient
+      .delete({
+        TableName: this.memesTable,
+        Key: {
+          userId,
+          category,
+        },
+      })
+      .promise();
+    console.log("Delete Category result", result);
+    return "";
   }
 
   async updateFiles(meme: MemeCategory) {

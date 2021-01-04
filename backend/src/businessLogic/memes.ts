@@ -11,6 +11,10 @@ export async function getAllMemes(userId: string): Promise<MemeCategory[]> {
   return memeAccess.getAllMemes(userId);
 }
 
+export async function deleteCategory(userId: string, category: string) {
+  return memeAccess.deleteCategory(userId, category);
+}
+
 export async function addMeme(
   newMeme: MemeUpload,
   userId: string
