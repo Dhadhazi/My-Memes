@@ -1,0 +1,19 @@
+.title {
+  display: flex;
+  justify-content: center;
+}
+
+.memeImg{
+  max-width: 250px;
+  max-height: 250px;
+}
+
+.imageDiv{
+  display: flex;
+  flex-direction: column;
+}
+
+.memesMainBox{
+  display: flex;
+  flex-wrap: wrap;
+}

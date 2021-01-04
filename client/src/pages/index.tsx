@@ -3,6 +3,13 @@ import { NextPage } from "next";
 import { useAuth0 } from "../lib/auth0-spa";
 import Layout from "../components/Layout";
 import { UploadMeme } from "../components/UploadMeme";
+import { Display } from "../components/Display";
+
+import dynamic from "next/dynamic";
+
+const DynamicComponent = dynamic(() => import("../components/Display"), {
+  ssr: false,
+});
 
 interface Props {}
 
@@ -12,9 +19,10 @@ const Page: NextPage<Props> = () => {
   return (
     <Layout>
       {user && (
-        <div>
+        <>
           <UploadMeme />
-        </div>
+          <DynamicComponent />
+        </>
       )}
     </Layout>
   );

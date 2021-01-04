@@ -10,7 +10,6 @@ export async function getAllMemes(idToken: string): Promise<MemeCategory[]> {
       Authorization: `Bearer ${idToken}`,
     },
   });
-  console.log("Memes:", response.data);
   return response.data.items;
 }
 

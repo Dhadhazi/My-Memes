@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addMeme } from "../api/memeapi";
+import { addMeme, getUploadUrl, uploadFile } from "../api/memeapi";
 import { useAuth0 } from "../lib/auth0-spa";
 
 export const UploadMeme = () => {
@@ -40,7 +40,10 @@ export const UploadMeme = () => {
       file,
     };
     const res = await addMeme(idToken, meme);
-    console.log(res);
+    const memeArray = res.files[res.files.length - 1].split("/");
+    const memeId = memeArray[memeArray.length - 1];
+    const uploadUrl = await getUploadUrl(idToken, memeId);
+    uploadFile(uploadUrl, file);
   }
 
   return (
