@@ -2,8 +2,6 @@ import * as React from "react";
 import { NextPage } from "next";
 import { useAuth0 } from "../lib/auth0-spa";
 import Layout from "../components/Layout";
-import { UploadMeme } from "../components/UploadMeme";
-import { Display } from "../components/Display";
 
 import dynamic from "next/dynamic";
 
@@ -20,7 +18,6 @@ const Page: NextPage<Props> = () => {
     <Layout>
       {user && (
         <>
-          <UploadMeme />
           <DynamicComponent />
         </>
       )}

@@ -1,6 +1,7 @@
 .title {
   display: flex;
   justify-content: center;
+  margin: 0
 }
 
 .memeImg{
@@ -16,4 +17,24 @@
 .memesMainBox{
   display: flex;
   flex-wrap: wrap;
+}
+
+.titleBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10px 0px;
+}
+
+.menuBox{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 2px solid black;
+}
+
+.categoryBox{
+  display: flex;
+  flex-direction: column;
 }

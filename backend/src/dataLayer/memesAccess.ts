@@ -28,15 +28,15 @@ export class MemeAccess {
 
   async categoryExist(
     userId: string,
-    category: string
+    categoryId: string
   ): Promise<MemeCategory[]> {
     const result = await this.docClient
       .query({
         TableName: this.memesTable,
-        KeyConditionExpression: "userId = :userId AND category = :category",
+        KeyConditionExpression: "userId = :userId AND categoryId = :categoryId",
         ExpressionAttributeValues: {
           ":userId": userId,
-          ":category": category,
+          ":categoryId": categoryId,
         },
       })
       .promise();
@@ -56,13 +56,13 @@ export class MemeAccess {
     return meme;
   }
 
-  async deleteCategory(userId: string, category: string) {
+  async deleteCategory(userId: string, categoryId: string) {
     const result = await this.docClient
       .delete({
         TableName: this.memesTable,
         Key: {
           userId,
-          category,
+          categoryId,
         },
       })
       .promise();
@@ -76,12 +76,13 @@ export class MemeAccess {
         TableName: this.memesTable,
         Key: {
           userId: meme.userId,
-          category: meme.category,
+          categoryId: meme.categoryId,
         },
         ExpressionAttributeValues: {
+          ":category": meme.category,
           ":files": meme.files,
         },
-        UpdateExpression: "SET files = :files",
+        UpdateExpression: "SET files = :files, category = :category",
         ReturnValues: "ALL_NEW",
       })
       .promise();

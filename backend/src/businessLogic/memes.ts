@@ -11,8 +11,8 @@ export async function getAllMemes(userId: string): Promise<MemeCategory[]> {
   return memeAccess.getAllMemes(userId);
 }
 
-export async function deleteCategory(userId: string, category: string) {
-  return memeAccess.deleteCategory(userId, category);
+export async function deleteCategory(userId: string, categoryId: string) {
+  return memeAccess.deleteCategory(userId, categoryId);
 }
 
 export async function addMeme(
@@ -20,16 +20,16 @@ export async function addMeme(
   userId: string
 ): Promise<MemeCategory> {
   const memeId = uuid.v4();
+  const categoryId = uuid.v4();
 
   const url = `https://${process.env.IMAGES_S3_BUCKET}.s3.amazonaws.com/${memeId}`;
 
-  const categoryExists = await memeAccess.categoryExist(
-    userId,
-    newMeme.category
-  );
-
-  if (categoryExists.length > 0) {
-    const updatedCategory = categoryExists[0];
+  if (newMeme.categoryId) {
+    const getCategory = await memeAccess.categoryExist(
+      userId,
+      newMeme.categoryId
+    );
+    const updatedCategory = getCategory[0];
     updatedCategory.files.push(url);
 
     await memeAccess.updateFiles(updatedCategory);
@@ -39,6 +39,7 @@ export async function addMeme(
     return await memeAccess.createMemeCategory({
       userId,
       category: newMeme.category,
+      categoryId,
       files: [url],
     });
   }

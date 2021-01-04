@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { addMeme, getUploadUrl, uploadFile } from "../api/memeapi";
 import { useAuth0 } from "../lib/auth0-spa";
 
-export const UploadMeme = () => {
+type Props = {
+  toggleLoading: Function;
+};
+
+export const UploadMeme = ({ toggleLoading }: Props) => {
   const [file, setFile] = useState<any>();
   const [category, setCategory] = useState<string>("");
   const auth = useAuth0();
@@ -33,6 +37,7 @@ export const UploadMeme = () => {
       alert("Category must be at least 3 charactes");
       return;
     }
+    toggleLoading();
     const idToken = await getIdToken();
 
     const meme = {
@@ -43,7 +48,10 @@ export const UploadMeme = () => {
     const memeArray = res.files[res.files.length - 1].split("/");
     const memeId = memeArray[memeArray.length - 1];
     const uploadUrl = await getUploadUrl(idToken, memeId);
-    uploadFile(uploadUrl, file);
+    await uploadFile(uploadUrl, file);
+    setFile("");
+    setCategory("");
+    toggleLoading();
   }
 
   return (

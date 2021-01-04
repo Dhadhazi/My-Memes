@@ -30,12 +30,24 @@ export async function addMeme(
   return response.data.item;
 }
 
+export async function deleteCategory(
+  idToken: string,
+  categoryId: string
+): Promise<void> {
+  await Axios.delete(`${apiEndpoint}/memes/delete/${categoryId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
+    },
+  });
+}
+
 export async function getUploadUrl(
   idToken: string,
   memeId: string
 ): Promise<string> {
   const response = await Axios.post(
-    `${apiEndpoint}/memes/${memeId}/attachment`,
+    `${apiEndpoint}/memes/attachment/${memeId}`,
     "",
     {
       headers: {
@@ -50,6 +62,7 @@ export async function getUploadUrl(
 export async function uploadFile(
   uploadUrl: string,
   file: Buffer
-): Promise<void> {
+): Promise<boolean> {
   await Axios.put(uploadUrl, file);
+  return true;
 }
