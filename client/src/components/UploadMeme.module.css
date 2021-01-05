@@ -1,0 +1,21 @@
+.categoryMainBox{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+}
+
+.categoryInput{
+  height: 24px;
+  width: 200px;
+  font-size: 16px;
+}
+
+.fileUploadBox{
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.submitButton{
+  width: 200px;
+  font-size: 18px;
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { deleteCategory, getAllMemes } from "../api/memeapi";
+import { deleteCategory, getAllMemes, updateCategory } from "../api/memeapi";
 import { useAuth0 } from "../lib/auth0-spa";
 import { MemeCategory } from "../types/MemeCategory";
 import styles from "./Display.module.css";
@@ -30,8 +30,19 @@ export default function Display() {
     setCategory(e.target.value);
   }
 
-  function handleDeleteMeme(image) {
-    console.log(image);
+  async function handleDeleteMeme(image, categoryId) {
+    toggleLoading();
+    const selectedCategory = memes.filter(
+      (meme) => meme.categoryId === categoryId
+    );
+    const updatedCategory = selectedCategory[0];
+    updatedCategory.files = updatedCategory.files.filter(
+      (file) => file !== image
+    );
+    console.log(updatedCategory);
+    const token = await getIdToken();
+    await updateCategory(token, updatedCategory);
+    toggleLoading();
   }
 
   async function handleDeleteCategory(categoryId) {
@@ -58,11 +69,10 @@ export default function Display() {
     return <img src="/loading.svg" />;
   }
 
-  console.log(memes);
   return (
     <div>
       <div className={styles.menuBox}>
-        <UploadMeme toggleLoading={toggleLoading} />
+        <UploadMeme toggleLoading={toggleLoading} memes={memes} />
         <div className={styles.categoryBox}>
           Sort for category:
           <select onChange={handleCategorySelect}>
@@ -96,9 +106,10 @@ export default function Display() {
                 <div className={styles.memesMainBox}>
                   {meme.files.map((img: string) => (
                     <div className={styles.imageDiv} key={img}>
-                      <img src={img} className={styles.memeImg} key={img} />
-                      <button>Archive</button>
-                      <button onClick={() => handleDeleteMeme(img)}>
+                      <img src={img} className={styles.memeImg} />
+                      <button
+                        onClick={() => handleDeleteMeme(img, meme.categoryId)}
+                      >
                         Delete
                       </button>
                     </div>

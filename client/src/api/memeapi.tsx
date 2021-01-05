@@ -42,6 +42,22 @@ export async function deleteCategory(
   });
 }
 
+export async function updateCategory(
+  idToken: string,
+  updatedCategory: MemeCategory
+): Promise<MemeCategory> {
+  const response = await Axios.post(
+    `${apiEndpoint}/memes/update/${updatedCategory.categoryId}`,
+    JSON.stringify(updatedCategory),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`,
+      },
+    }
+  );
+  return response.data.item;
+}
 export async function getUploadUrl(
   idToken: string,
   memeId: string
