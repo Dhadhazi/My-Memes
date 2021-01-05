@@ -15,6 +15,8 @@ export const handler: APIGatewayProxyHandler = async (
 
   const userId = getUserIdFromHeader(event.headers.Authorization);
 
+  console.log("HTTP category delete request received", categoryId);
+
   const deleteitem = await deleteCategory(userId, categoryId);
 
   return {

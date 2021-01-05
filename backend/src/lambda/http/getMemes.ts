@@ -14,6 +14,8 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   const userId = getUserIdFromHeader(event.headers.Authorization);
 
+  console.log("Get all memes for user request received. user: ", userId);
+
   const memes = await getAllMemes(userId);
 
   return {

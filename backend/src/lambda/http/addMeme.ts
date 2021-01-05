@@ -27,6 +27,8 @@ export const handler: APIGatewayProxyHandler = async (
       body: "Category name too short",
     };
 
+  console.log("HTTP MEME received", newMeme);
+
   const newItem =
     newMeme.categoryId.length > 15
       ? await addMeme(newMeme, userId)

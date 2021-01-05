@@ -23,6 +23,8 @@ export async function addMeme(
 
   const url = `https://${process.env.IMAGES_S3_BUCKET}.s3.amazonaws.com/${memeId}`;
 
+  console.log("MEME ID and URL generated: ", memeId, url);
+
   const getCategory = await memeAccess.getOneCategory(
     userId,
     newMeme.categoryId
@@ -30,6 +32,8 @@ export async function addMeme(
 
   const updatedCategory = getCategory[0];
   updatedCategory.files.push(url);
+
+  console.log("Updated category made: ", updateCategory);
 
   await memeAccess.updateCategory(updatedCategory);
 
@@ -52,6 +56,8 @@ export async function createCategory(
   const categoryId = uuid.v4();
 
   const url = `https://${process.env.IMAGES_S3_BUCKET}.s3.amazonaws.com/${memeId}`;
+
+  console.log("MemeId, categoryId and url created: ", memeId, categoryId, url);
 
   return await memeAccess.createMemeCategory({
     userId,

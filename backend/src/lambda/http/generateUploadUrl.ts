@@ -11,7 +11,7 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   const memeId = event.pathParameters.memeId;
 
-  console.log("GET UPLOAD MEMEID: ", memeId);
+  console.log("GET upload meme Id received: ", memeId);
   const url = await getUploadUrl(memeId);
 
   console.log("GET UPLOAD URL Event complete. URL: ", url);

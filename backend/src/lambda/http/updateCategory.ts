@@ -57,6 +57,8 @@ export const handler: APIGatewayProxyHandler = async (
       body: "Files must be an array, even if empty",
     };
 
+  console.log("Update category received without error: ", updatedCategory);
+
   const category = await updateCategory(updatedCategory);
 
   return {
