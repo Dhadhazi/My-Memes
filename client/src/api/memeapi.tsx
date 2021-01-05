@@ -34,7 +34,7 @@ export async function deleteCategory(
   idToken: string,
   categoryId: string
 ): Promise<void> {
-  await Axios.delete(`${apiEndpoint}/memes/delete/${categoryId}`, {
+  await Axios.delete(`${apiEndpoint}/memes/${categoryId}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${idToken}`,
@@ -46,8 +46,8 @@ export async function updateCategory(
   idToken: string,
   updatedCategory: MemeCategory
 ): Promise<MemeCategory> {
-  const response = await Axios.post(
-    `${apiEndpoint}/memes/update/${updatedCategory.categoryId}`,
+  const response = await Axios.patch(
+    `${apiEndpoint}/memes/${updatedCategory.categoryId}`,
     JSON.stringify(updatedCategory),
     {
       headers: {

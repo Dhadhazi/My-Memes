@@ -31,7 +31,15 @@ export async function addMeme(
   const updatedCategory = getCategory[0];
   updatedCategory.files.push(url);
 
-  await memeAccess.updateFiles(updatedCategory);
+  await memeAccess.updateCategory(updatedCategory);
+
+  return updatedCategory;
+}
+
+export async function updateCategory(
+  updatedCategory: MemeCategory
+): Promise<MemeCategory> {
+  await memeAccess.updateCategory(updatedCategory);
 
   return updatedCategory;
 }

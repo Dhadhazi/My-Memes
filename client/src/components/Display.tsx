@@ -39,7 +39,7 @@ export default function Display() {
     updatedCategory.files = updatedCategory.files.filter(
       (file) => file !== image
     );
-    console.log(updatedCategory);
+
     const token = await getIdToken();
     await updateCategory(token, updatedCategory);
     toggleLoading();

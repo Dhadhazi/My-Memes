@@ -77,13 +77,27 @@ functions:
     events:
       - http:
           method: delete
-          path: memes/delete/{category}
+          path: memes/{categoryId}
           cors: true
           authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEMES_TABLE}
+
+  UpdateCategory:
+    handler: src/lambda/http/updateCategory.handler
+    events:
+      - http:
+          method: patch
+          path: memes/{categoryId}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEMES_TABLE}
 
   GenerateUploadUrl:

@@ -70,7 +70,7 @@ export class MemeAccess {
     return "";
   }
 
-  async updateFiles(meme: MemeCategory) {
+  async updateCategory(meme: MemeCategory) {
     const result = await this.docClient
       .update({
         TableName: this.memesTable,
