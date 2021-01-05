@@ -7,8 +7,7 @@ import {
 } from "aws-lambda";
 
 import { getUserIdFromHeader } from "../../auth/utils";
-import { MemeCategory } from "../../models/MemeCategory";
-import { addMeme } from "../../businessLogic/memes";
+import { addMeme, createCategory } from "../../businessLogic/memes";
 import { MemeUpload } from "../../models/MemeUpload";
 
 export const handler: APIGatewayProxyHandler = async (
@@ -28,7 +27,10 @@ export const handler: APIGatewayProxyHandler = async (
       body: "Category name too short",
     };
 
-  const newItem = await addMeme(newMeme, userId);
+  const newItem =
+    newMeme.categoryId.length > 15
+      ? await addMeme(newMeme, userId)
+      : await createCategory(newMeme, userId);
 
   return {
     statusCode: 201,

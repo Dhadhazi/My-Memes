@@ -26,7 +26,7 @@ export class MemeAccess {
     return items as MemeCategory[];
   }
 
-  async categoryExist(
+  async getOneCategory(
     userId: string,
     categoryId: string
   ): Promise<MemeCategory[]> {

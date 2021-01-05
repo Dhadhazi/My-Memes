@@ -11,11 +11,11 @@ import { deleteCategory } from "../../businessLogic/memes";
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  const category = event.pathParameters.category;
+  const categoryId = event.pathParameters.categoryId;
 
   const userId = getUserIdFromHeader(event.headers.Authorization);
 
-  const deleteitem = await deleteCategory(userId, category);
+  const deleteitem = await deleteCategory(userId, categoryId);
 
   return {
     statusCode: 200,

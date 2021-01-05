@@ -20,29 +20,37 @@ export async function addMeme(
   userId: string
 ): Promise<MemeCategory> {
   const memeId = uuid.v4();
+
+  const url = `https://${process.env.IMAGES_S3_BUCKET}.s3.amazonaws.com/${memeId}`;
+
+  const getCategory = await memeAccess.getOneCategory(
+    userId,
+    newMeme.categoryId
+  );
+
+  const updatedCategory = getCategory[0];
+  updatedCategory.files.push(url);
+
+  await memeAccess.updateFiles(updatedCategory);
+
+  return updatedCategory;
+}
+
+export async function createCategory(
+  newMeme: MemeUpload,
+  userId: string
+): Promise<MemeCategory> {
+  const memeId = uuid.v4();
   const categoryId = uuid.v4();
 
   const url = `https://${process.env.IMAGES_S3_BUCKET}.s3.amazonaws.com/${memeId}`;
 
-  if (newMeme.categoryId) {
-    const getCategory = await memeAccess.categoryExist(
-      userId,
-      newMeme.categoryId
-    );
-    const updatedCategory = getCategory[0];
-    updatedCategory.files.push(url);
-
-    await memeAccess.updateFiles(updatedCategory);
-
-    return updatedCategory;
-  } else {
-    return await memeAccess.createMemeCategory({
-      userId,
-      category: newMeme.category,
-      categoryId,
-      files: [url],
-    });
-  }
+  return await memeAccess.createMemeCategory({
+    userId,
+    categoryId,
+    category: newMeme.category,
+    files: [url],
+  });
 }
 
 export async function getUploadUrl(memeId: string) {

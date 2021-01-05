@@ -16,7 +16,7 @@ provider:
   region: ${opt:region, 'eu-west-1'}
 
   environment:
-    MEMES_TABLE: Memes-${self:provider.stage}
+    MEMES_TABLE: Memess-${self:provider.stage}
     IMAGES_S3_BUCKET: meme-images-a564434-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
@@ -121,12 +121,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: category
+          - AttributeName: categoryId
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: category
+          - AttributeName: categoryId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
 
